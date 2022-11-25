@@ -252,7 +252,7 @@ class PrompHelp:
 
 	@staticmethod
 	def print_detailed(cmd):			
-		print(PrompHelp.commands[cmd]['details']) if cmd in PrompHelp.commands.keys() else print(f'No details for command "{cmd}".')
+		print(PrompHelp.commands[cmd]['details']) if cmd in PrompHelp.commands else print(f'No details for command "{cmd}".')
 
 
 
@@ -261,7 +261,7 @@ class PrompHelp:
 
 		valid = True
 
-		if cmd not in PrompHelp.commands.keys():
+		if cmd not in PrompHelp.commands:
 			print('Unknown command.')
 			valid = False
 
@@ -402,7 +402,7 @@ class Completer(object):
 		# Autocomplete session IDs
 		elif (lb_list[0].lower() in ['exec', 'alias', 'kill', 'shell']) and (lb_list_len > 1) and (lb_list[-1][0] != "/"):
 
-			if lb_list[-1] in Sessions_manager.active_sessions.keys():
+			if lb_list[-1] in Sessions_manager.active_sessions:
 				pass
 
 			else:				
@@ -570,7 +570,7 @@ def main():
 				cmd_list_len = len(cmd_list)
 				cmd = cmd_list[0].lower() if cmd_list else ''
 
-				if cmd in core.requests.keys():
+				if cmd in core.requests:
 					core.requests[cmd] = True
 					continue
 
@@ -749,7 +749,7 @@ def main():
 					if sid == cmd_list[1]:
 						print('Unrecognized alias.')
 
-					elif sid in Sessions_manager.active_sessions.keys():
+					elif sid in Sessions_manager.active_sessions:
 						Sessions_manager.active_sessions[sid]['aliased'] = False
 						Sessions_manager.active_sessions[sid]['alias'] = None
 

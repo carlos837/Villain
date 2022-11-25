@@ -496,7 +496,7 @@ class Obfuscator:
 			'Invoke-RestMethod' : 'irm'
 		}
 
-		for alt in alternatives.keys():
+		for alt in alternatives:
 
 			p = randint(0,1)
 
@@ -588,7 +588,7 @@ class Sessions_manager:
 	@staticmethod
 	def return_session_owner_id(session_id):
 
-		if session_id in Sessions_manager.active_sessions.keys():
+		if session_id in Sessions_manager.active_sessions:
 			return Sessions_manager.active_sessions[session_id]['Owner']
 
 		else:
@@ -618,7 +618,7 @@ class Sessions_manager:
 
 	def kill_session(self, session_id):
 
-		if session_id in self.active_sessions.keys():
+		if session_id in self.active_sessions:
 			if self.active_sessions[session_id]['Owner'] == Core_server.SERVER_UNIQUE_ID:
 				Hoaxshell.dropSession(session_id)
 				sleep(Hoaxshell_settings.default_frequency)
@@ -747,7 +747,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 					elif user_input == '':
 						continue
 
-					elif user_input in Core_server.requests.keys():
+					elif user_input in Core_server.requests:
 						Core_server.requests[user_input] = True
 
 					else:
@@ -831,8 +831,8 @@ class Hoaxshell(BaseHTTPRequestHandler):
 			session_id = None
 
 
-		if session_id and (session_id not in Sessions_manager.active_sessions.keys()):
-			if session_id in Sessions_manager.legit_session_ids.keys():
+		if session_id and (session_id not in Sessions_manager.active_sessions):
+			if session_id in Sessions_manager.legit_session_ids:
 				h = session_id.split('-')
 				Hoaxshell.verify.append(h[0])
 				Hoaxshell.get_cmd.append(h[1])
@@ -853,7 +853,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 				Hoaxshell.command_pool[session_id] = []
 
-		elif session_id and (session_id in Sessions_manager.active_sessions.keys()):
+		elif session_id and (session_id in Sessions_manager.active_sessions):
 			Sessions_manager.active_sessions[session_id]['last_received'] = timestamp	
 
 
@@ -863,7 +863,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 		self.server_version = Hoaxshell_settings.server_version
 		self.sys_version = ""
 		session_id = self.headers.get(Hoaxshell.header_id)
-		legit = True if session_id in Sessions_manager.legit_session_ids.keys() else False
+		legit = True if session_id in Sessions_manager.legit_session_ids else False
 
 
 		# Verify execution	
@@ -931,7 +931,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 		timestamp = int(datetime.now().timestamp())
 		session_id = self.headers.get(self.header_id)
-		legit = True if (session_id in Sessions_manager.legit_session_ids.keys()) else False
+		legit = True if (session_id in Sessions_manager.legit_session_ids) else False
 
 		if legit:		
 
@@ -1050,7 +1050,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 		Threading_params.thread_limiter.acquire()
 
-		while session_id in Sessions_manager.active_sessions.keys():
+		while session_id in Sessions_manager.active_sessions:
 
 			timestamp = int(datetime.now().timestamp())
 			tlimit = (Hoaxshell_settings.default_frequency + Sessions_manager_settings.shell_state_change_after)
@@ -1249,7 +1249,7 @@ class Core_server:
 						data = decrypted_data[1]
 
 						# Check if session exists
-						if data['session_id'] in Sessions_manager.active_sessions.keys():																			
+						if data['session_id'] in Sessions_manager.active_sessions:																			
 							Hoaxshell.command_pool[data['session_id']].append(data['command'])
 							Core_server.send_msg(conn, self.response_ack(sibling_id))
 
@@ -1757,7 +1757,7 @@ class Core_server:
 	def proxy_cmd_for_exec_by_sibling(sibling_id, session_id, command):
 
 		# Check again if server in siblings
-		if sibling_id not in Core_server.sibling_servers.keys():
+		if sibling_id not in Core_server.sibling_servers:
 			print(f'\r[{FAILED}] Failed to proxy the command. Connection with the sibling server may be lost.')
 			return
 
