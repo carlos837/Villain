@@ -408,10 +408,8 @@ class Obfuscator:
 
 			if (obf in self.restricted_var_names) or (obf in self.used_var_names):
 				continue
-
-			else:
-				self.used_var_names.append(obf)
-				legal = True
+			self.used_var_names.append(obf)
+			legal = True
 
 		return obf
 
