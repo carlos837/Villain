@@ -1088,10 +1088,10 @@ def initiate_hoax_server():
 			httpd = HTTPServer((Hoaxshell_settings.bind_address, port), Hoaxshell)
 
 		except OSError:
-			exit(f'[{DEBUG}] Hoaxshell HTTP server failed to start. Port {port} seems to already be in use.\n')
+			sys.exit(f'[{DEBUG}] Hoaxshell HTTP server failed to start. Port {port} seems to already be in use.\n')
 
 		except:
-			exit(f'\n[{DEBUG}] Hoaxshell HTTP server failed to start (Unknown error occurred).\n')
+			sys.exit(f'\n[{DEBUG}] Hoaxshell HTTP server failed to start (Unknown error occurred).\n')
 
 		if Hoaxshell_settings.ssl_support:
 			httpd.socket = ssl.wrap_socket (
