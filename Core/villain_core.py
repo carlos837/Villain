@@ -266,7 +266,7 @@ class Obfuscator:
 			if path == 1: 
 				return char
 
-			return '\w' if path == 2 else f'({char}|\\?)'
+			return r'\w' if path == 2 else f'({char}|\\?)'
 
 
 
@@ -275,7 +275,7 @@ class Obfuscator:
 			if path == 1: 
 				return char
 
-			return '\d' if path == 2 else f'({char}|\\?)'
+			return r'\d' if path == 2 else f'({char}|\\?)'
 
 
 
@@ -287,7 +287,7 @@ class Obfuscator:
 			if path == 1: 
 				return char
 
-			return '\W' if path == 2 else f'({char}|\\?)'
+			return r'\W' if path == 2 else f'({char}|\\?)'
 
 		else:
 			return None
@@ -303,7 +303,7 @@ class Obfuscator:
 	def string_to_regex(self, string):
 
 		# First check if string is actually a regex
-		if re.match( "^\[.*\}$", string):
+		if re.match( r"^\[.*\}$", string):
 			return string
 
 		else:
@@ -425,7 +425,7 @@ class Obfuscator:
 	def mask_payload(self, payload):
 
 		# Obfuscate variable name definitions
-		variables = re.findall("\$[A-Za-z0-9_]*={1}", payload)
+		variables = re.findall(r"\$[A-Za-z0-9_]*={1}", payload)
 
 		if variables:
 
@@ -479,7 +479,7 @@ class Obfuscator:
 
 
 		# Randomize the case of each char in parameter names
-		ps_parameters = re.findall("\s-[A-Za-z]*", payload)
+		ps_parameters = re.findall(r"\s-[A-Za-z]*", payload)
 
 		if ps_parameters:		
 			for param in ps_parameters:			
