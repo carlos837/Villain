@@ -716,7 +716,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 	def activate_shell_session(session_id, os_type):
 
 		session_data = Sessions_manager.active_sessions[session_id]
-		is_remote_shell = True if not session_data['self_owned'] else False	
+		is_remote_shell = bool(not session_data['self_owned'])	
 
 		if is_remote_shell:
 
@@ -863,7 +863,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 		self.server_version = Hoaxshell_settings.server_version
 		self.sys_version = ""
 		session_id = self.headers.get(Hoaxshell.header_id)
-		legit = True if session_id in Sessions_manager.legit_session_ids else False
+		legit = session_id in Sessions_manager.legit_session_ids
 
 
 		# Verify execution	
@@ -931,7 +931,7 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 		timestamp = int(datetime.now().timestamp())
 		session_id = self.headers.get(self.header_id)
-		legit = True if (session_id in Sessions_manager.legit_session_ids) else False
+		legit = (session_id in Sessions_manager.legit_session_ids)
 
 		if legit:		
 
