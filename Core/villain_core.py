@@ -37,13 +37,15 @@ class Payload_generator:
 		}
 
 
-	def encodeUTF16(self, payload):
+	@staticmethod
+	def encodeUTF16(payload):
 		enc_payload = "powershell -e " + base64.b64encode(payload.encode('utf16')[2:]).decode()
 		return enc_payload
 
 
 
-	def args_to_dict(self, args_list):
+	@staticmethod
+	def args_to_dict(args_list):
 		
 		try:
 			args_dict = {}
@@ -64,7 +66,8 @@ class Payload_generator:
 	
 
 
-	def read_file(self, path):
+	@staticmethod
+	def read_file(path):
 		
 		f = open(path, 'r')
 		content = f.read()
@@ -252,7 +255,8 @@ class Obfuscator:
 
 	
 	
-	def mask_char(self, char):
+	@staticmethod
+	def mask_char(char):
 		
 		path = randint(1,3)
 			
@@ -289,7 +293,8 @@ class Obfuscator:
 
 
 
-	def randomize_case(self, string):
+	@staticmethod
+	def randomize_case(string):
 		return ''.join(choice((str.upper, str.lower))(c) for c in string)
 
 
@@ -340,7 +345,8 @@ class Obfuscator:
 
 
 
-	def concatenate_string(self, string):
+	@staticmethod
+	def concatenate_string(string):
 		
 		str_length = len(string)
 		
@@ -376,7 +382,8 @@ class Obfuscator:
 
 
 
-	def get_random_str(self, main_str, substr_len):
+	@staticmethod
+	def get_random_str(main_str, substr_len):
 		
 		index = randrange(1, len(main_str) - substr_len + 1) 
 		return main_str[index : (index + substr_len)]
@@ -652,7 +659,8 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 
 
-	def search_output_for_signature(self, output):
+	@staticmethod
+	def search_output_for_signature(output):
 		
 		try:
 			sibling_server_id = re.findall("{[a-zA-Z0-9]{32}}", output)[-1].strip("{}")
@@ -1036,7 +1044,8 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 
 
-	def monitor_shell_state(self, session_id):
+	@staticmethod
+	def monitor_shell_state(session_id):
 
 		Threading_params.thread_limiter.acquire()
 		
@@ -1583,7 +1592,8 @@ class Core_server:
 
 
 
-	def update_shell_sessions(self, shells_data):
+	@staticmethod
+	def update_shell_sessions(shells_data):
 
 		current_shells = clone_dict_keys(Sessions_manager.active_sessions)
 		additional_shells = 0
@@ -1793,7 +1803,8 @@ class Core_server:
 			
 
 
-	def remove_all_sessions(self, sibling_id):
+	@staticmethod
+	def remove_all_sessions(sibling_id):
 		
 		active_sessions = clone_dict_keys(Sessions_manager.active_sessions)
 		

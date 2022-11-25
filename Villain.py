@@ -373,7 +373,8 @@ class Completer(object):
 				
 
 
-	def update_prompt(self, typed, new_content, lower = False):
+	@staticmethod
+	def update_prompt(typed, new_content, lower = False):
 		global_readline.insert_text(new_content[typed:])			
 	
 	
