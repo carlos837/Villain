@@ -269,7 +269,7 @@ class Obfuscator:
 
 
 
-		elif char.isnumeric():
+		if char.isnumeric():
 
 			if path == 1: 
 				return char
@@ -278,7 +278,7 @@ class Obfuscator:
 
 
 
-		elif char in '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~':
+		if char in '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~':
 
 			if char in ['$^*\\+?']:
 				char = '\\' + char
@@ -287,9 +287,7 @@ class Obfuscator:
 				return char
 
 			return r'\W' if path == 2 else f'({char}|\\?)'
-
-		else:
-			return None
+		return None
 
 
 
@@ -305,43 +303,41 @@ class Obfuscator:
 		if re.match( r"^\[.*\}$", string):
 			return string
 
-		else:
+		legal = False
 
-			legal = False
+		while not legal:
+			regex = ''
+			str_length = len(string)
+			chars_used = 0
+			c = 0
 
-			while not legal:
-				regex = ''
-				str_length = len(string)
-				chars_used = 0
-				c = 0
+			while True:
 
-				while True:
+				chars_left = (str_length - chars_used)			
 
-					chars_left = (str_length - chars_used)			
+				if chars_left:
 
-					if chars_left:
+					pair_length = randint(1, chars_left)
+					regex += '['
 
-						pair_length = randint(1, chars_left)
-						regex += '['
+					for i in range(c, pair_length + c):
 
-						for i in range(c, pair_length + c):
+						masked = self.mask_char(string[i])
+						regex += masked
+						c += 1
 
-							masked = self.mask_char(string[i])
-							regex += masked
-							c += 1
+					chars_used += pair_length
 
-						chars_used += pair_length
+					regex += ']{' + str(pair_length) + '}'
 
-						regex += ']{' + str(pair_length) + '}'
+				else:
+					break
 
-					else:
-						break
+			# Test generated regex
+			if re.match(regex, string):
+				legal = True
 
-				# Test generated regex
-				if re.match(regex, string):
-					legal = True
-
-			return regex
+		return regex
 
 
 
@@ -587,9 +583,7 @@ class Sessions_manager:
 
 		if session_id in Sessions_manager.active_sessions:
 			return Sessions_manager.active_sessions[session_id]['Owner']
-
-		else:
-			return None
+		return None
 
 
 	@staticmethod
@@ -1171,7 +1165,7 @@ class Core_server:
 
 
 			# If the sender's IP address is in the list of acknowledged for connection servers and the msg is a valid UUID4, then establish connection
-			elif address[0] in self.acknowledged_servers:
+			if address[0] in self.acknowledged_servers:
 
 				str_data = raw_data.decode('utf-8', 'ignore').strip()
 
@@ -1628,9 +1622,7 @@ class Core_server:
 			encapsulated_response_data_decrypted = decrypt_msg(sibling_id.encode('utf-8'), encapsulated_response_data_encrypted, server_unique_id[0:16].encode('utf-8'))
 			decapsulated_response_data = Core_server.decapsulate_dict(encapsulated_response_data_decrypted, capsule) # returns [capsule, received_data]
 			return decapsulated_response_data
-
-		else:
-			return encapsulated_response_data_encrypted
+		return encapsulated_response_data_encrypted
 
 
 
@@ -1705,7 +1697,7 @@ class Core_server:
 			if response in ['connection_refused', 'timed_out', 'connection_reset', 'no_route_to_host', 'unknown_error']:
 				return print(f'\r[{FAILED}] Request to connect failed ({response}).')
 
-			elif response == self.CONNECT_ACK:
+			if response == self.CONNECT_ACK:
 				response = self.send_receive_one(f'{self.SERVER_UNIQUE_ID}:{Core_server_settings.bind_port}:{self.HOSTNAME}', server_ip, server_port, encode_msg = True)
 				tmp = response.decode('utf-8', 'ignore').split(':')
 				sibling_id = tmp[0]
