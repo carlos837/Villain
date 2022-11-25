@@ -290,9 +290,7 @@ def alias_sanitizer(word, _min = 2, _max = 26):
 				return [f'Alias includes illegal character: "{char}".']
 
 		return word
-
-	else:
-		return ['Alias length must be between 2 to 26 characters.']
+	return ['Alias length must be between 2 to 26 characters.']
 
 
 
@@ -337,7 +335,7 @@ class Completer(object):
 		if len(matches) == 1:
 			return matches[0]
 
-		elif len(matches) > 1:
+		if len(matches) > 1:
 
 			char_count = 0
 
@@ -356,11 +354,9 @@ class Completer(object):
 
 					if self.tab_counter <= 1:
 						return new_word_frag[0:-1]
-
-					else:						
-						print_shadow('\n' + '  '.join(matches))
-						Main_prompt.rst_prompt()
-						return False 
+					print_shadow('\n' + '  '.join(matches))
+					Main_prompt.rst_prompt()
+					return False 
 
 				elif len(unique) == 1:
 					return False
@@ -392,7 +388,7 @@ class Completer(object):
 
 
 		# Get prompt command from word fragment
-		elif lb_list_len == 1:
+		if lb_list_len == 1:
 
 			match = self.get_match_from_list(lb_list[0].lower(), self.main_prompt_commands)
 			self.update_prompt(len(lb_list[0]), match) if match else chill()
