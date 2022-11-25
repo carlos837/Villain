@@ -97,7 +97,7 @@ class PrompHelp:
 
 
 		'generate' : {
-			'details' : f''' 			
+			'details' : rf''' 			
 			\r  Generate backdoor payload. If you start Villain with SSL the generated payload(s) 
 			\r  will be adjusted accordingly. 
 				
@@ -548,8 +548,8 @@ def main():
 					continue
 
 				# Handle single/double quoted arguments
-				quoted_args_single = re.findall("'{1}[\s\S]*'{1}", user_input)
-				quoted_args_double = re.findall('"{1}[\s\S]*"{1}', user_input)
+				quoted_args_single = re.findall(r"'{1}[\s\S]*'{1}", user_input)
+				quoted_args_double = re.findall(r'"{1}[\s\S]*"{1}', user_input)
 				quoted_args = quoted_args_single + quoted_args_double
 
 				if len(quoted_args):
