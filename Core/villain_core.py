@@ -923,7 +923,6 @@ class Hoaxshell(BaseHTTPRequestHandler):
 			self.send_response(200)
 			self.end_headers()
 			self.wfile.write(b'exit 1') # Move on mate.
-			pass
 
 
 
@@ -981,7 +980,6 @@ class Hoaxshell(BaseHTTPRequestHandler):
 			self.send_response(200)
 			self.end_headers()
 			self.wfile.write(b'Move on mate.')
-			pass
 
 
 
@@ -1354,7 +1352,6 @@ class Core_server:
 
 		except:
 			print('failed to process a request')
-			pass				
 
 		conn.close()
 
