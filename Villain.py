@@ -489,7 +489,6 @@ def main():
 
 			elif re.search('Already up to date', u):
 				print(f'[{INFO}] Already running the latest version!')
-				pass
 
 			else:
 				print(f'[{FAILED}] Something went wrong. Are you running Villain from your local git repository?')
