@@ -27,7 +27,7 @@ args = parser.parse_args()
 
 Hoaxshell_settings.certfile = args.certfile
 Hoaxshell_settings.keyfile = args.keyfile
-Hoaxshell_settings.ssl_support = True if (args.certfile and args.keyfile) else False
+Hoaxshell_settings.ssl_support = bool((args.certfile and args.keyfile))
 Hoaxshell_settings.bind_port = args.hoax_port if args.hoax_port else Hoaxshell_settings.bind_port
 
 if Hoaxshell_settings.ssl_support:
@@ -793,7 +793,7 @@ def main():
 
 			if Sessions_manager.active_sessions.keys() or core.sibling_servers.keys():
 				choice = input('\nAre you sure you wish to exit? All of your sessions/connections with siblings will be lost [yes/no]: ').lower()
-				verified = True if choice in ['yes', 'y'] else False
+				verified = choice in ['yes', 'y']
 
 			if verified:				
 				print('\r')
