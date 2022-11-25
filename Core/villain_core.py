@@ -9,6 +9,7 @@
 import ssl, socket, struct
 import netifaces as ni
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import sys
 from warnings import filterwarnings
 from datetime import date, datetime
 from ast import literal_eval
@@ -1078,7 +1079,7 @@ def initiate_hoax_server():
 
 		# Check if both cert and key files were provided
 		if (Hoaxshell_settings.certfile and not Hoaxshell_settings.keyfile) or (Hoaxshell_settings.keyfile and not Hoaxshell_settings.certfile):
-			exit(f'[{DEBUG}] SSL support seems to be misconfigured (missing key or cert file).')
+			sys.exit(f'[{DEBUG}] SSL support seems to be misconfigured (missing key or cert file).')
 
 		# Start http server
 		port = Hoaxshell_settings.bind_port if not Hoaxshell_settings.ssl_support else Hoaxshell_settings.bind_port_ssl
